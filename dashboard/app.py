@@ -105,15 +105,20 @@ with ui.sidebar():
     )
 
 with ui.layout_columns():
-    with ui.value_box(showcase="📰", theme="bg-gradient-blue-purple"):
-        ui.h4("Latest Story")
-
+    
+    with ui.value_box(showcase="🔍", theme="bg-gradient-blue-red"):
+        ui.h4("Misinformation by Category")
         @render.text
-        def latest_story():
-            _, _, latest_entry = reactive_misinformation_data()
-            return f"{latest_entry['story_type']} - {latest_entry['story_category']}"
-
-    with ui.card(full_screen=True):
+        def misinformation_by_category():
+            deque_snapshot, _, _ = reactive_misinformation_data()
+            category_count = {category: 0 for category in ["Politics", "Health", "Tech", "Entertainment"]}
+            for entry in deque_snapshot:
+                if entry['story_type'] == 'Misleading':
+                    category_count[entry['story_category']] += 1
+            category_str = " | ".join([f"{category}: {count}" for category, count in category_count.items()])
+            return category_str
+        
+    with ui.card(full_screen=True, height="400px", width="auto"):
         ui.card_header("Recent Stories")
 
         @render.data_frame
@@ -171,7 +176,7 @@ with ui.layout_columns():
                         aggfunc="sum",
                         fill_value=0
                     )
-                    fig = Figure(figsize=(10, 6))
+                    fig = Figure(figsize=(14, 8))
                     ax = fig.add_subplot(111)
                     sns.heatmap(
                         heatmap_data,
@@ -204,5 +209,3 @@ with ui.layout_columns():
                     )
                     fig.update_traces(mode="lines+markers")
                     return fig
-
-
