@@ -1,4 +1,3 @@
-# ## Import Necessary Libraries
 from collections import deque
 from datetime import datetime, timedelta
 import random
@@ -106,7 +105,8 @@ with ui.sidebar():
 
 with ui.layout_columns():
     
-    with ui.value_box(showcase="🔍", theme="bg-gradient-blue-red"):
+    # Misinformation by Category box with the ⚠️ icon
+    with ui.value_box(showcase="⚠️", theme="bg-gradient-blue-red"):
         ui.h4("Misinformation by Category")
         @render.text
         def misinformation_by_category():
